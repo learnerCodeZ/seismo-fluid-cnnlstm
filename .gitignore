@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (too large, keep only clean/)
+data/raw/
+data/external/
+
+# Results (too large, regenerate with scripts)
+results/
+
+# Models
+*.h5
+*.pt
+*.pth
+*.pkl
+
+# Logs
+*.log
+
+# Byte-compiled
+*.pyc

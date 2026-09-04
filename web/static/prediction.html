@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型预测对比 - 地震流体异常检测</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">地震流体异常检测可视化平台</div>
+        <div class="nav-links">
+            <a href="/">数据概览</a>
+            <a href="/prediction" class="active">模型预测</a>
+            <a href="/anomaly">异常检测</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="filter-bar">
+            <div class="filter-group">
+                <label>变量组合</label>
+                <select id="varSelect">
+                    <option value="radon">水氡（单变量）</option>
+                    <option value="level">水位（单变量）</option>
+                    <option value="radon_level">水氡+水位（双变量）</option>
+                    <option value="radon_level_weather">水氡+水位+气象（多变量）</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>滑动窗口</label>
+                <select id="windowSelect">
+                    <option value="15">15天</option>
+                    <option value="30">30天</option>
+                    <option value="45">45天</option>
+                    <option value="60" selected>60天</option>
+                    <option value="90">90天</option>
+                    <option value="120">120天</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>选择模型</label>
+                <div class="checkbox-group" id="model-checkboxes">
+                    <label><input type="checkbox" value="rf" checked> 随机森林</label>
+                    <label><input type="checkbox" value="cnn_lstm" checked> CNN-LSTM</label>
+                </div>
+            </div>
+        </section>
+
+        <section class="chart-section">
+            <h3>预测 vs 观测（标准化值）</h3>
+            <p class="section-desc">* 数据经 z-score 标准化：原始 Bq/L 值转换为均值=0、标准差=1 的无量纲数值。负数表示"低于平均水平"，正数表示"高于平均水平"。多变量模型输入多个特征（如水氡+水位），但输出仍只预测水氡。预测曲线是滑动窗口（60天）逐天预测的结果。详见 Q&A.md</p>
+            <div id="prediction-chart" style="height: 400px;"></div>
+        </section>
+
+        <section class="chart-section">
+            <h3>残差图</h3>
+            <div id="residual-chart" style="height: 300px;"></div>
+        </section>
+
+        <section class="chart-section">
+            <h3>评估指标</h3>
+            <div class="table-container">
+                <table id="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>模型</th>
+                            <th>RMSE</th>
+                            <th>MAE</th>
+                            <th>MAPE (%)</th>
+                            <th>R²</th>
+                        </tr>
+                    </thead>
+                    <tbody id="metrics-body"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/prediction.js"></script>
+</body>
+</html>
